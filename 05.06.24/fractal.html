@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+  }
+  canvas {
+    border: 1px solid black;
+  }
+</style>
+</head>
+<body>
+
+<button id="increaseDepth">Увеличить глубину рекурсии</button>
+<canvas id="serpinskiCanvas" width="800" height="600"></canvas>
+
+<script>
+  const canvas = document.getElementById('serpinskiCanvas');
+  const ctx = canvas.getContext('2d');
+  let depth = 0;
+
+  function drawSerpinski(x, y, size, depth) {
+    if (depth === 0) {
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(x, y, size, size);
+    } else {
+      const newSize = size / 3;
+      for (let dy = 0; dy < 3; dy++) {
+        for (let dx = 0; dx < 3; dx++) {
+          if (dx !== 1 || dy !== 1) {
+            drawSerpinski(x + dx * newSize, y + dy * newSize, newSize, depth - 1);
+          }
+        }
+      }
+    }
+  }
+
+  function drawCarpet() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawSerpinski(0, 0, canvas.width, depth);
+  }
+
+  document.getElementById('increaseDepth').addEventListener('click', function() {
+    depth++;
+    drawCarpet();
+  });
+
+  drawCarpet();
+</script>
+
+</body>
+</html>
